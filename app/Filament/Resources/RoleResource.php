@@ -23,16 +23,29 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * БЛОК ЛОКАЛИЗАЦИИ
+     */
+    public static function getLabel(): string
+    {
+        return __('admin.role');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('admin.roles');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Название роли')
-                    ->placeholder('Введите название роли')
+                    ->label(__('role.role_name'))
+                    ->placeholder(__('role.role_name_description'))
                     ->required(),
                 Select::make('permission_boxes_id')
-                    ->label('Пакет разрешений')
+                    ->label(__('role.permit_name'))
                     ->options(PermissionBox::all()->pluck('name', 'id'))
                     ->searchable()
                     ->required()
@@ -45,14 +58,15 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-            ->label('Название роли'),
-                Tables\Columns\TextColumn::make('permission_boxes_id.name')
-            ->label('Пакет разрешений'),
+                    ->label(__('role.role_name')),
+                Tables\Columns\TextColumn::make('permissionBox.name')
+                    ->label(__('role.permit_name')),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

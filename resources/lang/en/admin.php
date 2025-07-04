@@ -1,0 +1,23 @@
+<?php
+return [
+    'permit_box' => 'Permission box',
+    'permit_boxes' => 'Permission boxes',
+    'role' => 'Role',
+    'roles' => 'Roles',
+    'user' => 'User',
+    'users' => 'Users',
+    'title' => 'Name',
+    'description' => 'Enter description',
+    'preview_image' => 'Preview image',
+    'product_image' => 'Product image',
+    'price' => 'Price',
+    'created_at' => 'Created',
+    'updated_at' => 'Updated',
+    'enterTitle' => 'Enter name',
+    'enterDescription' => 'Enter description',
+    'enterPrice' => 'Set price',
+    'category' => 'Сategory',
+    'categories' => 'Сategories',
+    'shift' => 'Shift',
+    'shifts' => 'Shifts',
+];

@@ -1,0 +1,23 @@
+<?php
+return [
+    'permit_box' => 'Пакет разрешений',
+    'permit_boxes' => 'Пакеты разрешений',
+    'role' => 'Роль',
+    'roles' => 'Роли',
+    'user' => 'Пользователь',
+    'users' => 'Пользователи',
+    'title' => 'Наименование',
+    'description' => 'Введите данные',
+    'preview_image' => 'Preview image',
+    'product_image' => 'Product image',
+    'price' => 'Price',
+    'created_at' => 'Created',
+    'updated_at' => 'Updated',
+    'enterTitle' => 'Enter name',
+    'enterDescription' => 'Enter description',
+    'enterPrice' => 'Set price',
+    'category' => 'Сategory',
+    'categories' => 'Сategories',
+    'shift' => 'Shift',
+    'shifts' => 'Shifts',
+];

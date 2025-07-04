@@ -22,6 +22,19 @@ class PermissionBoxResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * БЛОК ЛОКАЛИЗАЦИИ
+     */
+    public static function getLabel(): string
+    {
+        return __('admin.permit_box');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('admin.permit_boxes');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -29,27 +42,27 @@ class PermissionBoxResource extends Resource
                 Forms\Components\Section::make('')
                     ->schema([
                 TextInput::make('name')
-                    ->label('Название пакета доступов')
-                    ->placeholder('Введите название пакета доступов')
+                    ->label(__('admin.title'))
+                    ->placeholder(__('admin.description'))
                     ->required()
                 ]),
                 Forms\Components\Section::make('Разрешения')
                     ->schema([
                         Grid::make(3)->schema([
                             Toggle::make('view_resource')
-                                ->label('Просмотр ресурсов'),
+                                ->label(__('permission.view_resource')),
                             Toggle::make('read_resource')
-                                ->label('Изменение ресурсов'),
+                                ->label(__('permission.read_resource')),
                             Toggle::make('create_resource')
-                                ->label('Создание ресурсов'),
+                                ->label(__('permission.create_resource')),
                         ]),
                         Grid::make(3)->schema([
                             Toggle::make('view_user')
-                                ->label('Просмотр пользователей'),
+                                ->label(__('permission.view_user')),
                             Toggle::make('read_user')
-                                ->label('Изменение пользователей'),
+                                ->label(__('permission.read_user')),
                             Toggle::make('create_user')
-                                ->label('Создание пользователей'),
+                                ->label(__('permission.create_user')),
                         ])
                     ])
             ]);
@@ -60,7 +73,7 @@ class PermissionBoxResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Название пакета доступов')
+                    ->label(__('admin.title'))
             ])
             ->filters([
                 //

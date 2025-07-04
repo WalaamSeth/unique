@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PermissionCheckableInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|PermissionBox whereViewUser($value)
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class PermissionBox extends Model
+class PermissionBox extends Model implements PermissionCheckableInterface
 {
     protected $table = 'permission_boxes';
 
@@ -63,5 +64,15 @@ class PermissionBox extends Model
     public function roles()
     {
         return $this->hasMany(Role::class, 'permission_boxes_id');
+    }
+
+    public function hasFullPermissions(): bool
+    {
+        return $this->view_resource &&
+            $this->read_resource &&
+            $this->create_resource &&
+            $this->view_user &&
+            $this->read_user &&
+            $this->create_user;
     }
 }

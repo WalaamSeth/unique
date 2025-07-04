@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Model;
     protected $fillable = [
         'name',
         'slug',
+        'permission_boxes_id',
     ];
 
     protected function casts(): array

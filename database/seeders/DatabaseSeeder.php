@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'nickname' => 'Tester',
             'email' => 'test@example.com',
+            'phone' => '9111111111',
             'password' => Hash::make(
                 value: '#test#',
                 options: []

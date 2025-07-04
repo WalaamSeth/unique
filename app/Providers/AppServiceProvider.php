@@ -6,6 +6,8 @@ use App\Contracts\UserRepositoryInterface;
 use App\Contracts\UserServiceInterface;
 use App\Repositories\User\UserRepository;
 use App\Services\UserService;
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(['ru','en',]);
+        });
+        Paginator::useBootstrap();
     }
 }
