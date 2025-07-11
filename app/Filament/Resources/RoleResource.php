@@ -7,6 +7,8 @@ use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Manufacturer\Manufacturer;
 use App\Models\PermissionBox;
 use App\Models\Role;
+use App\Traits\HasAdminPermission;
+use App\Traits\HasResourcePermission;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,10 +21,18 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RoleResource extends Resource
 {
+    use HasAdminPermission;
+
     protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?int $navigationSort = 2;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->roles()->first()?->permissionBox?->is_admin == 1.0;
+    }
     /**
      * БЛОК ЛОКАЛИЗАЦИИ
      */
@@ -71,7 +81,6 @@ class RoleResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -1,0 +1,27 @@
+<?php
+return [
+    'permit_box' => 'Berechtigungspaket',
+    'permit_boxes' => 'Berechtigungspakete',
+    'role' => 'Rolle',
+    'roles' => 'Rollen',
+    'user' => 'Benutzer',
+    'users' => 'Benutzer',
+    'product' => 'Produkt',
+    'products' => 'Produkte',
+    'category' => 'Kategorie',
+    'categories' => 'Kategorien',
+    'dashboard' => 'Persönlicher Bereich',
+    'article_title' => 'Artikelüberschrift',
+    'article_description' => 'Inhalt',
+    'article' => 'Wissensdatenbank',
+    'articles' => 'Wissensdatenbank',
+    'title' => 'Bezeichnung',
+    'description' => 'Beschreibung',
+    'main_image' => 'Hauptbild',
+    'add_image' => 'Zusätzliche Bilder',
+    'created_at' => 'Erstellt am',
+    'updated_at' => 'Aktualisiert am',
+    'enterTitle' => 'Daten eingeben',
+    'enterDescription' => 'Beschreibung eingeben',
+    'owner' => 'Besitzer'
+];

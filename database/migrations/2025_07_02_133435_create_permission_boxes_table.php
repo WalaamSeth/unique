@@ -25,6 +25,13 @@ return new class extends Migration
             $table->float('view_user')->default(0);
             $table->float('read_user')->default(0);
             $table->float('create_user')->default(0);
+            $table->float('view_product')->default(0);
+            $table->float('read_product')->default(0);
+            $table->float('create_product')->default(0);
+            $table->float('view_article')->default(0);
+            $table->float('read_article')->default(0);
+            $table->float('create_article')->default(0);
+            $table->float('is_admin')->default(0);
             $table->timestamps();
         });
     }

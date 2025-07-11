@@ -8,13 +8,22 @@ trait HasAdminStatus
 {
     public function getStatus(): string
     {
-        if (!$this->role || !$this->role->permissionBox) {
-            return 'Пользователь';
+        $this->loadMissing('roles.permissionBox');
+
+        $permissionBox = $this->roles->first()?->permissionBox;
+
+        if (!$permissionBox) {
+            return __('user.roles.user');
         }
 
-        return $this->role->permissionBox instanceof PermissionCheckableInterface &&
-        $this->role->permissionBox->hasFullPermissions()
-            ? 'Админ'
-            : 'Пользователь';
+        if ($permissionBox->is_admin && $permissionBox->hasFullPermissions()) {
+            return __('user.roles.admin');
+        }
+
+        if ($permissionBox->hasFullPermissions()) {
+            return __('user.roles.moderator');
+        }
+
+        return __('user.roles.user');
     }
 }

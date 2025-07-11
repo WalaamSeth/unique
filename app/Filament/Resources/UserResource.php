@@ -6,6 +6,8 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Role;
 use App\Models\User;
+use App\Traits\HasResourcePermission;
+use App\Traits\HasUserPermission;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,12 +15,16 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
-    protected static ?string $model = User::class;
+    use HasUserPermission;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = User::class;
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+
+    protected static ?int $navigationSort = 3;
 
     /**
      * БЛОК ЛОКАЛИЗАЦИИ
@@ -39,64 +45,87 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Section::make('')
                     ->schema([
-                TextInput::make('name')
-                    ->label(__('user.name'))
-                    ->placeholder(__('user.name_description'))
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('nickname')
-                    ->label(__('user.nickname'))
-                    ->placeholder(__('user.nickname_description'))
-                    ->required()
-                    ->maxLength(255),
+                        TextInput::make('name')
+                            ->label(__('user.name'))
+                            ->placeholder(__('user.name_description'))
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('nickname')
+                            ->label(__('user.nickname'))
+                            ->placeholder(__('user.nickname_description'))
+                            ->required()
+                            ->maxLength(255),
                     ]),
                 Forms\Components\Section::make('')
                     ->schema([
-                TextInput::make('phone')
-                    ->label(__('user.phone'))
-                    ->placeholder(__('user.phone_description'))
-                    ->tel()
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('email')
-                    ->label(__('user.email'))
-                    ->placeholder(__('user.email_description'))
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('password')
-                    ->label(__('user.password'))
-                    ->placeholder(__('user.password_description'))
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                        TextInput::make('phone')
+                            ->label(__('user.phone'))
+                            ->placeholder(__('user.phone_description'))
+                            ->tel()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->label(__('user.email'))
+                            ->placeholder(__('user.email_description'))
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('password')
+                            ->label(__('user.password'))
+                            ->placeholder(__('user.password_description'))
+                            ->password()
+                            ->required()
+                            ->maxLength(255),
                     ]),
                 Forms\Components\Section::make('')
                     ->schema([
-                Select::make('role_id')
-                    ->label(__('user.role'))
-                    ->options(Role::all()->pluck('name', 'id'))
-                    ->searchable()
-                    ->required()
-                    ->dehydrated()
-                    ->live()
-                    ->afterStateUpdated(function (Forms\Set $set, $state) {
-                        static::updateStatusBasedOnRole($set, $state);
-                    }),
-                TextInput::make('status')
-                    ->label(__('user.status'))
-                    ->disabled()
-                    ->maxLength(255)
-                    ->dehydrated()
+                        Select::make('roles')
+                        ->label(__('user.role'))
+                            ->relationship(
+                                name: 'roles',
+                                titleAttribute: 'name',
+                            )
+                            ->preload()
+                            ->searchable()
+                            ->required()
+                            ->live()
+                            ->dehydrated(false)
+                            ->afterStateUpdated(function (Forms\Set $set, $state) {
+                                static::updateStatusBasedOnRole($set, $state);
+                            }),
+                        TextInput::make('status')
+                            ->label(__('user.status'))
+                            ->disabled()
+                            ->maxLength(255)
+                            ->dehydrated()
                     ]),
             ]);
     }
 
-    protected static function updateStatusBasedOnRole(Forms\Set $set, $roleId): void
+    protected static function updateStatusBasedOnRole(Forms\Set $set, $state): void
     {
+        if (empty($state)) {
+            $set('status', __('user.roles.user'));
+            return;
+        }
+
+        $roleId = is_array($state) ? $state[0] : $state;
         $role = Role::with('permissionBox')->find($roleId);
-        $set('status', $role?->permissionBox?->hasFullPermissions() ? 'Админ' : 'Пользователь');
+
+        $status = $role?->permissionBox?->is_admin
+            ? __('user.roles.admin')
+            : ($role?->permissionBox?->hasFullPermissions()
+                ? __('user.roles.moderator')
+                : __('user.roles.user'));
+
+        $set('status', $status);
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('roles.permissionBox');
+    }
+
 
     public static function table(Table $table): Table
     {
@@ -134,7 +163,7 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ]);
     }

@@ -8,8 +8,9 @@ class UserObserver
 {
     public function saving(User $user)
     {
-        if ($user->isDirty('role_id')) {
-            $user->status = $user->status;
+        if ($user->isDirty('roles')) {
+            $user->load('roles.permissionBox');
+            $user->status = $user->getStatus();
         }
     }
 }

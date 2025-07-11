@@ -1,0 +1,27 @@
+<?php
+return [
+    'permit_box' => 'Forfait d\'autorisation',
+    'permit_boxes' => 'Forfaits d\'autorisation',
+    'role' => 'Rôle',
+    'roles' => 'Rôles',
+    'user' => 'Utilisateur',
+    'users' => 'Utilisateurs',
+    'product' => 'Produit',
+    'products' => 'Produits',
+    'category' => 'Catégorie',
+    'categories' => 'Catégories',
+    'dashboard' => 'Espace personnel',
+    'article_title' => 'Titre de l\'article',
+    'article_description' => 'Contenu',
+    'article' => 'Base de connaissances',
+    'articles' => 'Base de connaissances',
+    'title' => 'Désignation',
+    'description' => 'Description',
+    'main_image' => 'Image principale',
+    'add_image' => 'Images supplémentaires',
+    'created_at' => 'Créé le',
+    'updated_at' => 'Mis à jour le',
+    'enterTitle' => 'Entrer les données',
+    'enterDescription' => 'Entrer la description',
+    'owner' => 'Propriétaire'
+];

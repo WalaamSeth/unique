@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Contracts\SlugGeneratorInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\UserServiceInterface;
+use App\Models\Article;
 use App\Repositories\User\UserRepository;
+use App\Services\SlugGenerator;
 use App\Services\UserService;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use Filament\Facades\Filament;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
+        $this->app->bind(SlugGeneratorInterface::class, SlugGenerator::class);
     }
 
     /**
@@ -28,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['ru','en',]);
+                ->locales(['ru','en', 'de', 'fr',]);
         });
         Paginator::useBootstrap();
     }

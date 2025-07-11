@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PermissionBoxResource\Pages;
 use App\Filament\Resources\PermissionBoxResource\RelationManagers;
 use App\Models\PermissionBox;
+use App\Traits\HasAdminPermission;
+use App\Traits\HasResourcePermission;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
@@ -18,9 +20,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PermissionBoxResource extends Resource
 {
+    use HasAdminPermission;
+
     protected static ?string $model = PermissionBox::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+
+    protected static ?int $navigationSort = 1;
 
     /**
      * БЛОК ЛОКАЛИЗАЦИИ
@@ -43,29 +49,82 @@ class PermissionBoxResource extends Resource
                     ->schema([
                 TextInput::make('name')
                     ->label(__('admin.title'))
-                    ->placeholder(__('admin.description'))
+                    ->placeholder(__('admin.enterTitle'))
                     ->required()
                 ]),
                 Forms\Components\Section::make('Разрешения')
                     ->schema([
+                        Forms\Components\Section::make('')
+                            ->schema([
+                        Grid::make(3)->schema([
+                            Toggle::make('is_admin')
+                                ->label(__('permission.is_admin'))
+                                ->live()
+                                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                    self::toggleAllPermissions($state, $set);
+                                }),
+                        ]),
+                            ]),
                         Grid::make(3)->schema([
                             Toggle::make('view_resource')
-                                ->label(__('permission.view_resource')),
+                                ->label(__('permission.view_resource'))
+                                ->reactive(),
                             Toggle::make('read_resource')
-                                ->label(__('permission.read_resource')),
+                                ->label(__('permission.read_resource'))
+                                ->reactive(),
                             Toggle::make('create_resource')
-                                ->label(__('permission.create_resource')),
+                                ->label(__('permission.create_resource'))
+                                ->reactive(),
                         ]),
                         Grid::make(3)->schema([
                             Toggle::make('view_user')
-                                ->label(__('permission.view_user')),
+                                ->label(__('permission.view_user'))
+                                ->reactive(),
                             Toggle::make('read_user')
-                                ->label(__('permission.read_user')),
+                                ->label(__('permission.read_user'))
+                                ->reactive(),
                             Toggle::make('create_user')
-                                ->label(__('permission.create_user')),
+                                ->label(__('permission.create_user'))
+                                ->reactive(),
+                        ]),
+                        Grid::make(3)->schema([
+                            Toggle::make('view_product')
+                                ->label(__('permission.view_product'))
+                                ->reactive(),
+                            Toggle::make('read_product')
+                                ->label(__('permission.read_product'))
+                                ->reactive(),
+                            Toggle::make('create_product')
+                                ->label(__('permission.create_product'))
+                                ->reactive(),
+                        ]),
+                        Grid::make(3)->schema([
+                            Toggle::make('view_article')
+                                ->label(__('permission.view_article'))
+                                ->reactive(),
+                            Toggle::make('read_article')
+                                ->label(__('permission.read_article'))
+                                ->reactive(),
+                            Toggle::make('create_article')
+                                ->label(__('permission.create_article'))
+                                ->reactive(),
+
                         ])
                     ])
             ]);
+    }
+
+    protected static function toggleAllPermissions($state, Forms\Set $set): void
+    {
+        $permissions = [
+            'view_resource', 'read_resource', 'create_resource',
+            'view_user', 'read_user', 'create_user',
+            'view_article', 'read_article', 'create_article'
+        ];
+
+        foreach ($permissions as $permission) {
+            $set($permission, $state ? 1.0 : 0.0);
+        }
     }
 
     public static function table(Table $table): Table
@@ -84,7 +143,6 @@ class PermissionBoxResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

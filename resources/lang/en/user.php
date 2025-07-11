@@ -14,4 +14,9 @@ return [
     'phone_description' => 'Enter phone',
     'password_description' => 'Enter password',
     'status_description' => 'Enter description',
+    'roles' => [
+        'user' => 'User',
+        'moderator' => 'Moderator',
+        'admin' => 'Administrator',
+    ],
 ];

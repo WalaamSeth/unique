@@ -13,4 +13,9 @@ return [
     'email_description' => 'Введите email',
     'phone_description' => 'Введите номер телефона',
     'password_description' => 'Введите пароль',
+    'roles' => [
+        'user' => 'Пользователь',
+        'moderator' => 'Модератор',
+        'admin' => 'Администратор',
+    ],
 ];

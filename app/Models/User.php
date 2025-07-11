@@ -4,12 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Services\PermissionService;
 use App\Traits\HasAdminStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 /**
+ * App\Models\User
+ *
  * @property int $id
  * @property string $name
  * @property string|null $nickname
@@ -20,8 +23,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -37,7 +41,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @mixin \Illuminate\Database\Eloquent\
+ * @mixin \Eloquent
+ * @property-read int|null $notifications_count
+ * @property-read int|null $roles_count
+ * @property-read int|null $tokens_count
  */
 class User extends Authenticatable
 {
@@ -61,7 +68,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'status'
+        'status',
     ];
 
     /**
@@ -97,6 +104,81 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_users');
     }
 
+    public function canViewResource(): bool
+    {
+        return $this->getPermissionService()->canViewResource();
+    }
+
+    public function canReadResource(): bool
+    {
+        return $this->getPermissionService()->canReadResource();
+    }
+
+    public function canCreateResource(): bool
+    {
+        return $this->getPermissionService()->canCreateResource();
+    }
+
+    public function canViewUser(): bool
+    {
+        return $this->getPermissionService()->canViewUser();
+    }
+
+    public function canReadUser(): bool
+    {
+        return $this->getPermissionService()->canReadUser();
+    }
+
+    public function canCreateUser(): bool
+    {
+        return $this->getPermissionService()->canCreateUser();
+    }
+
+    public function canViewProduct(): bool
+    {
+        return $this->getPermissionService()->canViewProduct();
+    }
+
+    public function canReadProduct(): bool
+    {
+        return $this->getPermissionService()->canReadProduct();
+    }
+
+    public function canCreateProduct(): bool
+    {
+        return $this->getPermissionService()->canCreateProduct();
+    }
+
+    public function canViewArticle(): bool
+    {
+        return $this->getPermissionService()->canViewArticle();
+    }
+
+    public function canReadArticle(): bool
+    {
+        return $this->getPermissionService()->canReadArticle();
+    }
+
+    public function canCreateArticle(): bool
+    {
+        return $this->getPermissionService()->canCreateArticle();
+    }
+
+    public function hasFullPermissions(): bool
+    {
+        return $this->getPermissionService()->hasFullPermissions();
+    }
+
+    protected function getPermissionService(): PermissionService
+    {
+        if (!$this->relationLoaded('roles')) {
+            $this->load('roles.permissionBox');
+        }
+
+        $permissionBox = $this->roles->first()?->permissionBox ?? new PermissionBox();
+
+        return new PermissionService($permissionBox);
+    }
     public function getStatusAttribute(): string
     {
         return $this->getStatus();
