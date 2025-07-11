@@ -6,6 +6,8 @@ use App\Contracts\SlugGeneratorInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\UserServiceInterface;
 use App\Models\Article;
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Repositories\User\UserRepository;
 use App\Services\SlugGenerator;
 use App\Services\UserService;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(SlugGeneratorInterface::class, SlugGenerator::class);
+
     }
 
     /**
@@ -31,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        User::observe(UserObserver::class);
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
                 ->locales(['ru','en', 'de', 'fr',]);
