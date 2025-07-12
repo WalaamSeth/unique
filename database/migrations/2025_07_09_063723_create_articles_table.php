@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->json('images')->nullable();
+
+            $table->boolean('is_private')->default(0);
             $table->timestamps();
         });
     }

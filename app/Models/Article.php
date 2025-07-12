@@ -36,10 +36,12 @@ class Article extends Model
         'title',
         'content',
         'images',
+        'is_private'
     ];
 
     protected $casts = [
         'images' => 'array',
+        'is_private' => 'boolean',
     ];
 
 

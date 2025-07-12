@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\RoleAndPermission;
 
-use App\Contracts\PermissionCheckableInterface;
 use Illuminate\Database\Eloquent\Model;
 
 trait HasArticlePermission

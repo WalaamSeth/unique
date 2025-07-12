@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Traits;
-
-use App\Contracts\PermissionCheckableInterface;
-use Illuminate\Database\Eloquent\Model;
+namespace App\Traits\AdminPermission;
 
 trait HasAdminPermission
 {

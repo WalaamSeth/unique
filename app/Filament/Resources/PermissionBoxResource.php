@@ -5,18 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PermissionBoxResource\Pages;
 use App\Filament\Resources\PermissionBoxResource\RelationManagers;
 use App\Models\PermissionBox;
-use App\Traits\HasAdminPermission;
-use App\Traits\HasResourcePermission;
+use App\Traits\AdminPermission\HasAdminPermission;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PermissionBoxResource extends Resource
 {

@@ -17,18 +17,4 @@ class UserObserver
         }
     }
 
-    public function created(User $user)
-    {
-        try {
-            $role = Role::where('slug', 'user')->firstOrFail();
-
-            if (!$user->roles()->where('role_id', $role->id)->exists()) {
-                $user->roles()->attach($role->id);
-            }
-        } catch (\Exception $e) {
-            Log::error("Role attachment error: ".$e->getMessage(), [
-                'user_id' => $user->id
-            ]);
-        }
-    }
 }

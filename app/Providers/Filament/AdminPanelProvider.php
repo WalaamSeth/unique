@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use Agencetwogether\HooksHelper\HooksHelperPlugin;
 use App\Filament\Pages\Dashboard;
+use App\Filament\Resources\ArticleResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -29,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->registration(Pages\Auth\Register::class)
+            ->registration()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -45,7 +46,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 'panels::user-menu.before',
-                fn() => \Livewire\Livewire::mount('header-article-link')
+                fn() => \Livewire\Livewire::mount('header-article-link', [
+                    'url' => ArticleResource::getUrl(),
+                    'label' => ArticleResource::getNavigationLabel(),
+                    'icon' => 'heroicon-o-book-open',
+                ])
             )
             ->middleware([
                 EncryptCookies::class,

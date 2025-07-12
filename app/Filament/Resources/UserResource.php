@@ -6,15 +6,14 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Role;
 use App\Models\User;
-use App\Traits\HasResourcePermission;
-use App\Traits\HasUserPermission;
+use App\Traits\RoleAndPermission\HasUserPermission;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource

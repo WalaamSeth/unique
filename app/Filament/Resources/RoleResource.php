@@ -7,17 +7,13 @@ use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Manufacturer\Manufacturer;
 use App\Models\PermissionBox;
 use App\Models\Role;
-use App\Traits\HasAdminPermission;
-use App\Traits\HasResourcePermission;
-use Filament\Forms;
+use App\Traits\AdminPermission\HasAdminPermission;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RoleResource extends Resource
 {
